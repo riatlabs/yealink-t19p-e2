@@ -1,17 +1,24 @@
-This is an overview of the Yealink T19P-E2 phone and its "hackability".
+# Device Overview: Yealink T19P-E2
 
-There is no "ready to install" 3rd party firmware for the Yealink T19P-E2 phone, because it has 
+The Yealink T19P-E2 is a budget, entry-level IP phone. It reached End-of-Life (EOL) in 2021, meaning it no longer receives security patches. While there is no "ready-to-install" open-source firmware (like OpenWrt) due to proprietary hardware drivers, its Linux-based system makes it a popular target for security research.
 
-The Yealink T19P-E2 is a legacy device and "end-of-life" since 2021 - 
-but since the firmware security is less robust than newer models, it is the perfect target for hobbyist research.
-
-The Yealink T19P-E2 is a widely used, entry-level IP phone that has been the subject of significant security research. Because it is a budget device running a Linux-based firmware with a relatively wide attack surface, it is considered highly "hackable" for educational and research purposes.
+Size: 185mm x 188mm x 143mm.
 
 The T19P-E2 is known to have several vulnerability classes
 
 * Command Injection (Root Access): The device has history with authenticated Remote Code Execution (RCE). Specifically, CVE-2023-43959 allows an attacker with credentials (even low-level user ones) to execute arbitrary commands as root via the "Ping" diagnostic tool.
 * Weak Encryption/Hardcoded Keys: Security researchers have found hardcoded AES keys in Yealink firmware used to encrypt configuration files. If you can obtain a config file (.cfg) from a network, you can often decrypt it to find cleartext passwords (SIP credentials, admin passwords)
 * Supply Chain / Provisioning Attacks: The Yealink RPS (Redirection and Provisioning Service) has been scrutinized. If a phone is reset, it queries Yealink's central server to find its configuration. Researchers have demonstrated that if you can guess the MAC address (which is predictable for specific batches), you can potentially hijack the provisioning flow.
+
+
+# Research Tools
+
+Since these phones run on Linux, most research tools are open-source and CLI-based, making them perfect for macOS and Linux users.
+
+Firmware Analysis: Use binwalk (available via brew on macOS or nix-shell -p binwalk on NixOS) to extract the filesystem.
+
+Decryption: You can run yealink-confenc via Python.
+
 
 Good links to read
 * https://www.synacktiv.com/publications/no-grave-but-the-sip-reversing-a-voip-phone-firmware
